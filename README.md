@@ -46,6 +46,76 @@ curl -X POST http://localhost:3000/text-conversion/convert \
 }
 ```
 
+### 💬 流式聊天模組 (Streaming Chat)
+
+提供流式聊天 API 服務，將請求轉發到外部 AI API 並實時返回回應。
+
+**功能特色：**
+- 支援流式響應，實時返回 AI 回應
+- 多輪對話支援（user、assistant、system 角色）
+- 完整的輸入驗證和錯誤處理
+- 自動重試和超時機制（30 秒）
+- 完整的測試覆蓋
+
+**API 端點：**
+
+#### POST `/streaming-chat/stream`
+流式聊天對話
+
+**請求範例：**
+```bash
+curl -X POST http://localhost:3000/streaming-chat/stream \
+  -H "Content-Type: application/json" \
+  -d '{
+    "messages": [
+      {
+        "content": "Hello, how are you?",
+        "role": "user"
+      }
+    ]
+  }' \
+  --no-buffer
+```
+
+**多輪對話範例：**
+```bash
+curl -X POST http://localhost:3000/streaming-chat/stream \
+  -H "Content-Type: application/json" \
+  -d '{
+    "messages": [
+      {
+        "content": "What is TypeScript?",
+        "role": "user"
+      },
+      {
+        "content": "TypeScript is a programming language...",
+        "role": "assistant"
+      },
+      {
+        "content": "Can you give me a simple example?",
+        "role": "user"
+      }
+    ]
+  }' \
+  --no-buffer
+```
+
+**回應特色：**
+- 流式文字回應（`Content-Type: text/plain; charset=utf-8`）
+- 使用 `Transfer-Encoding: chunked` 進行分塊傳輸
+- 即時接收 AI 回應，無需等待完整回應
+
+#### GET `/streaming-chat/health`
+健康檢查端點
+
+**回應範例：**
+```json
+{
+  "status": "ok",
+  "message": "Streaming chat service is running"
+}
+```
+
 ## 🚀 快速開始
 
 ### 環境需求
@@ -85,6 +155,7 @@ npm run test:cov
 
 # 特定模組測試
 npm test -- --testPathPattern=text-conversion
+npm test -- --testPathPattern=streaming-chat
 ```
 
 ## 🔧 程式碼品質
@@ -106,12 +177,19 @@ src/
 ├── app.module.ts              # 應用程式模組
 ├── main.ts                    # 應用程式入口點
 └── modules/                   # POC 功能模組
-    └── text-conversion/       # 簡繁轉換模組
-        ├── text-conversion.module.ts
-        ├── text-conversion.controller.ts
-        ├── text-conversion.service.ts
-        ├── convert-text.dto.ts
-        ├── convert-text-response.dto.ts
+    ├── text-conversion/       # 簡繁轉換模組
+    │   ├── text-conversion.module.ts
+    │   ├── text-conversion.controller.ts
+    │   ├── text-conversion.service.ts
+    │   ├── convert-text.dto.ts
+    │   ├── convert-text-response.dto.ts
+    │   └── *.spec.ts          # 測試檔案
+    └── streaming-chat/        # 流式聊天模組
+        ├── streaming-chat.module.ts
+        ├── streaming-chat.controller.ts
+        ├── streaming-chat.service.ts
+        ├── chat-request.dto.ts
+        ├── chat-message.dto.ts
         └── *.spec.ts          # 測試檔案
 ```
 
@@ -141,9 +219,11 @@ src/
 - **語言**：TypeScript
 - **測試**：Jest
 - **驗證**：class-validator
+- **HTTP 客戶端**：Axios (NestJS HttpModule)
 - **程式碼品質**：ESLint + Prettier
 - **特殊函式庫**：
   - OpenCC (簡繁轉換)
+  - RxJS (流式處理)
 
 ## 📝 開發規範
 
@@ -159,6 +239,6 @@ src/
 2. 添加適當的測試
 3. 更新相關文件
 
-## 📄 授權
+## �� 授權
 
 本專案使用 MIT 授權。
