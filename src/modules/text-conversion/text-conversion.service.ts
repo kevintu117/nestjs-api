@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Converter } from 'opencc-js';
-import { ConvertTextResponseDto } from '../models/dto/convert-text-response.dto';
-import { ConvertTextDto } from '../models/dto/convert-text.dto';
+import { ConvertTextResponseDto } from './convert-text-response.dto';
+import { ConvertTextDto } from './convert-text.dto';
 
 /**
  * Service for converting simplified Chinese to traditional Chinese

@@ -1,7 +1,3 @@
----
-alwaysApply: true
----
-
 # 專案結構指南
 
 ## 專案概述
@@ -28,26 +24,28 @@ src/
     ├── auth/             # 認證模組
     ├── users/            # 使用者模組
     └── [feature]/        # 其他功能模組
-        ├── controllers/  # 控制器
-        ├── services/     # 服務
-        ├── models/       # 資料模型
-        │   ├── dto/      # 資料傳輸物件
-        │   └── entities/ # 實體類別
-        └── [feature].module.ts
+        ├── [feature].controller.ts      # 控制器
+        ├── [feature].controller.spec.ts # 控制器測試
+        ├── [feature].service.ts         # 服務
+        ├── [feature].service.spec.ts    # 服務測試
+        ├── [feature].module.ts          # 模組定義
+        ├── [feature].dto.ts             # 輸入 DTO
+        ├── [feature]-response.dto.ts    # 輸出 DTO
+        └── [feature].entity.ts          # 實體類別（如需要）
 ```
 
 ## 模組設計原則
 
 ### 功能模組結構
 
-每個功能模組應該包含：
+每個功能模組應該使用扁平化結構，所有檔案直接放在模組目錄中：
 
 - **Controllers**: 處理 HTTP 請求和回應
 - **Services**: 業務邏輯和資料存取
-- **Models**: 資料結構定義
-  - **DTOs**: 輸入驗證和資料傳輸
-  - **Entities**: 資料庫實體（使用 MikroORM）
+- **DTOs**: 輸入驗證和資料傳輸
+- **Entities**: 資料庫實體（使用 MikroORM，如需要）
 - **Module**: 模組定義檔案
+- **Tests**: 單元測試檔案
 
 ### 核心模組
 
@@ -64,20 +62,20 @@ src/
 
 ## 檔案命名慣例
 
-- **Controllers**: `*.controller.ts`
-- **Services**: `*.service.ts`
-- **Modules**: `*.module.ts`
-- **DTOs**: `*.dto.ts`
-- **Entities**: `*.entity.ts`
-- **Interfaces**: `*.interface.ts`
-- **Types**: `*.type.ts`
-- **Constants**: `*.constant.ts`
-- **Utils**: `*.util.ts`
+- **Controllers**: `[feature].controller.ts`
+- **Services**: `[feature].service.ts`
+- **Modules**: `[feature].module.ts`
+- **DTOs**: `[feature].dto.ts` (輸入), `[feature]-response.dto.ts` (輸出)
+- **Entities**: `[feature].entity.ts`
+- **Interfaces**: `[feature].interface.ts`
+- **Types**: `[feature].type.ts`
+- **Constants**: `[feature].constant.ts`
+- **Utils**: `[feature].util.ts`
 
 ## 測試檔案
 
-- **單元測試**: `*.spec.ts`
-- **端到端測試**: `*.e2e-spec.ts`
+- **單元測試**: `[feature].spec.ts`
+- **端到端測試**: `[feature].e2e-spec.ts`
 - **測試設定**: `jest-e2e.json`
 
 ## 設定檔案
@@ -86,13 +84,22 @@ src/
 - **NestJS 設定**: `nest-cli.json`
 - **Package 管理**: `package.json`
 - **ESLint 設定**: `eslint.config.mjs`
+- **VSCode 設定**: `.vscode/settings.json`
 
 ## 新增功能步驟
 
 1. 在 `src/modules/` 下建立新的功能資料夾
-2. 建立 DTOs 和 Entities
-3. 建立 Service 處理業務邏輯
-4. 建立 Controller 處理 HTTP 請求
-5. 建立 Module 並註冊依賴
-6. 在 `app.module.ts` 中匯入新模組
-7. 撰寫對應的測試檔案
+2. 在功能資料夾中直接建立所有需要的檔案
+3. 建立 DTOs 和 Entities（如需要）
+4. 建立 Service 處理業務邏輯
+5. 建立 Controller 處理 HTTP 請求
+6. 建立 Module 並註冊依賴
+7. 在 `app.module.ts` 中匯入新模組
+8. 撰寫對應的測試檔案
+
+## 重要原則
+
+- **扁平化結構**: 不使用子目錄，所有檔案直接放在模組目錄中
+- **單一職責**: 每個檔案只包含一個主要類別或功能
+- **相對引用**: 同一模組內的檔案使用相對路徑引用 (例如 `./feature.dto.ts`)
+- **清晰命名**: 檔案名稱應該清楚表達其功能和類型

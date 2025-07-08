@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { ConvertTextDto } from './convert-text.dto';
 import { TextConversionService } from './text-conversion.service';
-import { ConvertTextDto } from '../models/dto/convert-text.dto';
 
 describe('TextConversionService', () => {
   let service: TextConversionService;

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { TextConversionController } from './controllers/text-conversion.controller';
-import { TextConversionService } from './services/text-conversion.service';
+import { TextConversionController } from './text-conversion.controller';
+import { TextConversionService } from './text-conversion.service';
 
 /**
  * Module for text conversion functionality

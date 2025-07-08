@@ -1,7 +1,7 @@
 import { Controller, Post, Body, ValidationPipe, Get } from '@nestjs/common';
-import { ConvertTextResponseDto } from '../models/dto/convert-text-response.dto';
-import { ConvertTextDto } from '../models/dto/convert-text.dto';
-import { TextConversionService } from '../services/text-conversion.service';
+import { ConvertTextResponseDto } from './convert-text-response.dto';
+import { ConvertTextDto } from './convert-text.dto';
+import { TextConversionService } from './text-conversion.service';
 
 /**
  * Controller for text conversion operations

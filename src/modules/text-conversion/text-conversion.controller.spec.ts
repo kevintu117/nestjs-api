@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { ConvertTextResponseDto } from './convert-text-response.dto';
+import { ConvertTextDto } from './convert-text.dto';
 import { TextConversionController } from './text-conversion.controller';
-import { ConvertTextResponseDto } from '../models/dto/convert-text-response.dto';
-import { ConvertTextDto } from '../models/dto/convert-text.dto';
-import { TextConversionService } from '../services/text-conversion.service';
+import { TextConversionService } from './text-conversion.service';
 
 describe('TextConversionController', () => {
   let controller: TextConversionController;
