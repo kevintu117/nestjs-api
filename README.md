@@ -4,117 +4,32 @@
 
 ## 📋 目前實作的 POC 模組
 
-### 🈳 簡繁轉換模組 (Text Conversion)
+### 🈳 [簡繁轉換模組 (Text Conversion)](./src/modules/text-conversion/README.md)
 
 將簡體中文文字轉換為繁體中文的 API 服務。
 
-**功能特色：**
-- 使用 OpenCC 庫進行準確的簡繁轉換
-- 完整的輸入驗證（最大 10,000 字元）
-- RESTful API 設計
-- 完整的測試覆蓋
-
-**API 端點：**
-
-#### POST `/text-conversion/convert`
-轉換簡體中文為繁體中文
-
-**請求範例：**
+**快速開始：**
 ```bash
 curl -X POST http://localhost:3000/text-conversion/convert \
   -H "Content-Type: application/json" \
   -d '{"text":"简体中文测试"}'
 ```
 
-**回應範例：**
-```json
-{
-  "originalText": "简体中文测试",
-  "convertedText": "簡體中文測試",
-  "timestamp": "2025-07-08T02:35:19.784Z"
-}
-```
+**特色功能：** OpenCC 轉換 • 輸入驗證 • RESTful API
 
-#### GET `/text-conversion/health`
-健康檢查端點
-
-**回應範例：**
-```json
-{
-  "status": "ok",
-  "message": "Text conversion service is running"
-}
-```
-
-### 💬 流式聊天模組 (Streaming Chat)
+### 💬 [流式聊天模組 (Streaming Chat)](./src/modules/streaming-chat/README.md)
 
 提供流式聊天 API 服務，將請求轉發到外部 AI API 並實時返回回應。
 
-**功能特色：**
-- 支援流式響應，實時返回 AI 回應
-- 多輪對話支援（user、assistant、system 角色）
-- 完整的輸入驗證和錯誤處理
-- 自動重試和超時機制（30 秒）
-- 完整的測試覆蓋
-
-**API 端點：**
-
-#### POST `/streaming-chat/stream`
-流式聊天對話
-
-**請求範例：**
+**快速開始：**
 ```bash
 curl -X POST http://localhost:3000/streaming-chat/stream \
   -H "Content-Type: application/json" \
-  -d '{
-    "messages": [
-      {
-        "content": "Hello, how are you?",
-        "role": "user"
-      }
-    ]
-  }' \
+  -d '{"messages":[{"content":"Hello","role":"user"}]}' \
   --no-buffer
 ```
 
-**多輪對話範例：**
-```bash
-curl -X POST http://localhost:3000/streaming-chat/stream \
-  -H "Content-Type: application/json" \
-  -d '{
-    "messages": [
-      {
-        "content": "What is TypeScript?",
-        "role": "user"
-      },
-      {
-        "content": "TypeScript is a programming language...",
-        "role": "assistant"
-      },
-      {
-        "content": "Can you give me a simple example?",
-        "role": "user"
-      }
-    ]
-  }' \
-  --no-buffer
-```
-
-**回應特色：**
-- 流式文字回應（`Content-Type: text/plain; charset=utf-8`）
-- 使用 `Transfer-Encoding: chunked` 進行分塊傳輸
-- 即時接收 AI 回應，無需等待完整回應
-
-#### GET `/streaming-chat/health`
-健康檢查端點
-
-**回應範例：**
-```json
-{
-  "status": "ok",
-  "message": "Streaming chat service is running"
-}
-```
+**特色功能：** 流式響應 • 多輪對話 • RxJS Observable • 超時控制
 
 ## 🚀 快速開始
 
@@ -122,40 +37,39 @@ curl -X POST http://localhost:3000/streaming-chat/stream \
 - Node.js (v18 或更高版本)
 - npm
 
-### 安裝依賴
+### 安裝與啟動
 ```bash
+# 安裝依賴
 npm install
-```
 
-### 啟動開發伺服器
-```bash
-# 開發模式（支援熱重載）
+# 啟動開發伺服器（支援熱重載）
 npm run start:dev
-
-# 標準模式
-npm run start
-
-# 生產模式
-npm run start:prod
 ```
 
 伺服器預設在 `http://localhost:3000` 啟動
 
+### 健康檢查
+```bash
+# 檢查所有模組狀態
+curl http://localhost:3000/text-conversion/health
+curl http://localhost:3000/streaming-chat/health
+```
+
 ## 🧪 測試
 
 ```bash
-# 單元測試
+# 執行所有測試
 npm run test
+
+# 執行特定模組測試
+npm test -- --testPathPattern=text-conversion
+npm test -- --testPathPattern=streaming-chat
 
 # 端到端測試
 npm run test:e2e
 
 # 測試覆蓋率
 npm run test:cov
-
-# 特定模組測試
-npm test -- --testPathPattern=text-conversion
-npm test -- --testPathPattern=streaming-chat
 ```
 
 ## 🔧 程式碼品質
@@ -177,41 +91,38 @@ src/
 ├── app.module.ts              # 應用程式模組
 ├── main.ts                    # 應用程式入口點
 └── modules/                   # POC 功能模組
-    ├── text-conversion/       # 簡繁轉換模組
-    │   ├── text-conversion.module.ts
-    │   ├── text-conversion.controller.ts
-    │   ├── text-conversion.service.ts
-    │   ├── convert-text.dto.ts
-    │   ├── convert-text-response.dto.ts
+    ├── text-conversion/       # 🈳 簡繁轉換模組
+    │   ├── README.md          # 模組詳細說明
+    │   ├── *.ts               # TypeScript 檔案
     │   └── *.spec.ts          # 測試檔案
-    └── streaming-chat/        # 流式聊天模組
-        ├── streaming-chat.module.ts
-        ├── streaming-chat.controller.ts
-        ├── streaming-chat.service.ts
-        ├── chat-request.dto.ts
-        ├── chat-message.dto.ts
+    └── streaming-chat/        # 💬 流式聊天模組
+        ├── README.md          # 模組詳細說明
+        ├── *.ts               # TypeScript 檔案
         └── *.spec.ts          # 測試檔案
 ```
 
 ## 🎯 設計原則
 
-- **模組化架構**：每個 POC 都是獨立的模組
+- **模組化架構**：每個 POC 都是獨立的模組，有自己的 README
 - **扁平化結構**：模組內檔案直接放在模組目錄中，不使用子目錄
 - **類型安全**：使用 TypeScript 嚴格類型檢查
 - **測試導向**：每個功能都有完整的測試覆蓋
 - **程式碼品質**：使用 ESLint 和 Prettier 確保程式碼一致性
+- **文件完整**：每個模組都有詳細的使用說明和範例
 
 ## 🔄 新增 POC 模組
 
 1. 在 `src/modules/` 建立新的模組目錄
 2. 建立模組相關檔案：
-   - `[module-name].module.ts`
-   - `[module-name].controller.ts`
-   - `[module-name].service.ts`
-   - `[module-name].dto.ts`
-   - 對應的測試檔案
+   - `README.md` - 模組說明文件
+   - `[module-name].module.ts` - 模組定義
+   - `[module-name].controller.ts` - HTTP 控制器
+   - `[module-name].service.ts` - 業務邏輯服務
+   - `*.dto.ts` - 資料傳輸物件
+   - `*.spec.ts` - 測試檔案
 3. 在 `app.module.ts` 中註冊新模組
-4. 撰寫測試並確保通過
+4. 在主 README 新增模組連結
+5. 撰寫測試並確保通過
 
 ## 🛠️ 技術棧
 
@@ -220,24 +131,24 @@ src/
 - **測試**：Jest
 - **驗證**：class-validator
 - **HTTP 客戶端**：Axios (NestJS HttpModule)
+- **流式處理**：RxJS
 - **程式碼品質**：ESLint + Prettier
-- **特殊函式庫**：
-  - OpenCC (簡繁轉換)
-  - RxJS (流式處理)
+- **特殊函式庫**：OpenCC (簡繁轉換)
 
 ## 📝 開發規範
 
 專案遵循嚴格的開發規範，詳見：
 - `.cursor/rules/` - Cursor IDE 規則
 - `eslint.config.mjs` - ESLint 配置
-- `.vscode/settings.json` - VSCode 設定
+- 各模組 README - 詳細使用說明
 
 ## 🤝 貢獻
 
 歡迎提交新的 POC 想法或改進現有功能！請確保：
 1. 遵循專案的程式碼規範
 2. 添加適當的測試
-3. 更新相關文件
+3. 更新相關文件（包括模組 README）
+4. 在主 README 中新增模組連結
 
 ## �� 授權
 
