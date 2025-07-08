@@ -1,0 +1,98 @@
+---
+alwaysApply: true
+---
+
+# 專案結構指南
+
+## 專案概述
+
+這是一個基於 NestJS 的 TypeScript 後端 API 專案。主要入口點是 [main.ts](mdc:src/main.ts)，應用程式模組定義在 [app.module.ts](mdc:src/app.module.ts)。
+
+## 目錄結構
+
+```
+src/
+├── app.controller.ts      # 主要控制器
+├── app.service.ts         # 主要服務
+├── app.module.ts          # 應用程式模組
+├── main.ts               # 應用程式入口點
+├── core/                 # 核心功能模組
+│   ├── filters/          # 全域過濾器
+│   ├── guards/           # 權限守衛
+│   ├── interceptors/     # 攔截器
+│   └── middlewares/      # 中介軟體
+├── shared/               # 共用模組
+│   ├── services/         # 共用服務
+│   └── utils/            # 工具函式
+└── modules/              # 功能模組
+    ├── auth/             # 認證模組
+    ├── users/            # 使用者模組
+    └── [feature]/        # 其他功能模組
+        ├── controllers/  # 控制器
+        ├── services/     # 服務
+        ├── models/       # 資料模型
+        │   ├── dto/      # 資料傳輸物件
+        │   └── entities/ # 實體類別
+        └── [feature].module.ts
+```
+
+## 模組設計原則
+
+### 功能模組結構
+
+每個功能模組應該包含：
+
+- **Controllers**: 處理 HTTP 請求和回應
+- **Services**: 業務邏輯和資料存取
+- **Models**: 資料結構定義
+  - **DTOs**: 輸入驗證和資料傳輸
+  - **Entities**: 資料庫實體（使用 MikroORM）
+- **Module**: 模組定義檔案
+
+### 核心模組
+
+- **Filters**: 全域異常處理
+- **Guards**: 認證和授權
+- **Interceptors**: 請求/回應處理
+- **Middlewares**: 請求中介軟體
+
+### 共用模組
+
+- **Services**: 跨模組共用的服務
+- **Utils**: 工具函式和常數
+- **Types**: 共用型別定義
+
+## 檔案命名慣例
+
+- **Controllers**: `*.controller.ts`
+- **Services**: `*.service.ts`
+- **Modules**: `*.module.ts`
+- **DTOs**: `*.dto.ts`
+- **Entities**: `*.entity.ts`
+- **Interfaces**: `*.interface.ts`
+- **Types**: `*.type.ts`
+- **Constants**: `*.constant.ts`
+- **Utils**: `*.util.ts`
+
+## 測試檔案
+
+- **單元測試**: `*.spec.ts`
+- **端到端測試**: `*.e2e-spec.ts`
+- **測試設定**: `jest-e2e.json`
+
+## 設定檔案
+
+- **TypeScript 設定**: `tsconfig.json`, `tsconfig.build.json`
+- **NestJS 設定**: `nest-cli.json`
+- **Package 管理**: `package.json`
+- **ESLint 設定**: `eslint.config.mjs`
+
+## 新增功能步驟
+
+1. 在 `src/modules/` 下建立新的功能資料夾
+2. 建立 DTOs 和 Entities
+3. 建立 Service 處理業務邏輯
+4. 建立 Controller 處理 HTTP 請求
+5. 建立 Module 並註冊依賴
+6. 在 `app.module.ts` 中匯入新模組
+7. 撰寫對應的測試檔案
